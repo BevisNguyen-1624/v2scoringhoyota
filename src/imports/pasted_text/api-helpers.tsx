@@ -162,23 +162,42 @@ function markIdeaCompleted(ideaKey: string) {
 const MOCK_IDEAS = [
   {
     sheetName: "Phòng Kinh Doanh", rowIndex: 2, maNV: "NV001",
-    tenYT: "Tự động hóa quy trình báo cáo bán hàng", level: "Cải tiến quy trình",
-    thuNghiem: "Chưa", pbLienQuan: "Kinh doanh, IT", vungPB: "Vùng 1",
-    vanDe: "Báo cáo bán hàng tốn nhiều thời gian, dễ sai sót do nhập liệu thủ công",
-    moTa: "Xây dựng dashboard tự động kết nối với CRM, cập nhật số liệu real-time",
-    hieuQua: "Tiết kiệm 10h/tuần, giảm 90% sai sót", nguonLuc: "1 developer, 2 tuần",
-    giaTri: "Tăng hiệu suất team, dữ liệu chính xác hơn cho quyết định", link: "",
+    tenYT: "Tự động hóa quy trình báo cáo bán hàng",
+    hienTrang: "Báo cáo bán hàng tốn nhiều thời gian, dễ sai sót do nhập liệu thủ công",
+    tamQuanTrong: "Ảnh hưởng trực tiếp đến độ chính xác của số liệu kinh doanh và thời gian ra quyết định",
+    mucTieu: "Tự động hóa toàn bộ quy trình báo cáo, giảm thời gian xử lý xuống dưới 30 phút/tuần",
+    yTuong: "Xây dựng dashboard tự động kết nối với CRM, cập nhật số liệu real-time",
+    ketQuaKyVong: "Tiết kiệm 10h/tuần, giảm 90% sai sót trong vòng 1 tháng triển khai",
+    loDinh: "Tuần 1: phân tích yêu cầu. Tuần 2: xây dựng dashboard. Tuần 3: test & training",
+    boPhanLienQuan: "Kinh doanh (cung cấp yêu cầu), IT (phát triển), Ban giám đốc (phê duyệt)",
+    nganSach: "Ước tính 20 triệu VND (nhân công IT nội bộ)",
+    congCu: "Google Data Studio, CRM API, Google Sheets",
+    tacDong: "Giảm tải công việc thủ công cho team kinh doanh, tăng thời gian tập trung vào bán hàng",
+    loiIchDinhLuong: "Tiết kiệm 10h/tuần × 52 tuần = 520h/năm ~ 26 triệu VND chi phí nhân công",
+    loiIchDinhTinh: "Dữ liệu chính xác hơn giúp cải thiện tinh thần team và niềm tin vào số liệu",
+    ruiRo: "API CRM có thể thay đổi, team không quen dùng công cụ mới",
+    duPhong: "Backup file Excel thủ công, tổ chức buổi training 2h cho toàn team",
+    kpi: "Thời gian làm báo cáo hàng tuần < 30 phút, tỷ lệ sai sót < 5%",
     scoreA: "", scoreB: "", scoreC: "", scoreD: "", feedback: "",
   },
   {
     sheetName: "Phòng Kỹ Thuật", rowIndex: 5, maNV: "NV102",
-    tenYT: "Hệ thống quản lý bảo trì máy móc thông minh", level: "Sáng tạo mới",
-    thuNghiem: "Đã thử nghiệm", pbLienQuan: "Kỹ thuật, Sản xuất", vungPB: "Vùng 2",
-    vanDe: "Không có lịch bảo trì rõ ràng, máy móc thường hỏng đột xuất gây gián đoạn sản xuất",
-    moTa: "Xây dựng app mobile quản lý lịch bảo trì định kỳ, cảnh báo sớm khi thiết bị cần kiểm tra",
-    hieuQua: "Giảm 40% thời gian downtime, tăng tuổi thọ máy móc",
-    nguonLuc: "App có sẵn, cần 1 tuần setup và training",
-    giaTri: "Tăng năng suất sản xuất, giảm chi phí sửa chữa khẩn cấp", link: "",
+    tenYT: "Hệ thống quản lý bảo trì máy móc thông minh",
+    hienTrang: "Không có lịch bảo trì rõ ràng, máy móc thường hỏng đột xuất gây gián đoạn sản xuất",
+    tamQuanTrong: "Downtime máy móc ảnh hưởng trực tiếp đến năng suất và chi phí sửa chữa khẩn cấp",
+    mucTieu: "Giảm 40% tỷ lệ downtime máy móc trong 6 tháng đầu triển khai",
+    yTuong: "Xây dựng app mobile quản lý lịch bảo trì định kỳ, cảnh báo sớm khi thiết bị cần kiểm tra",
+    ketQuaKyVong: "Giảm 40% thời gian downtime, tăng tuổi thọ máy móc thêm 20% trong năm đầu",
+    loDinh: "Tháng 1: setup app & nhập liệu máy móc. Tháng 2: vận hành thử. Tháng 3: đánh giá & tối ưu",
+    boPhanLienQuan: "Kỹ thuật (vận hành), Sản xuất (phản hồi), IT (hỗ trợ kỹ thuật app)",
+    nganSach: "App có sẵn (miễn phí), chi phí training: ~5 triệu VND",
+    congCu: "App UpKeep hoặc Fiix (bảo trì máy móc), điện thoại Android",
+    tacDong: "Kỹ thuật viên chủ động bảo trì thay vì chờ máy hỏng",
+    loiIchDinhLuong: "Giảm 40% chi phí sửa chữa khẩn cấp ~ tiết kiệm 50 triệu/năm",
+    loiIchDinhTinh: "Cải thiện văn hóa bảo trì chủ động, giảm căng thẳng cho đội kỹ thuật",
+    ruiRo: "Kỹ thuật viên không dùng app thường xuyên",
+    duPhong: "Gamification: bảng xếp hạng tuân thủ bảo trì, nhắc nhở tự động qua Zalo",
+    kpi: "% thiết bị được bảo trì đúng hạn ≥ 90%, số lần hỏng đột xuất giảm ≥ 40%",
     scoreA: "", scoreB: "", scoreC: "", scoreD: "", feedback: "",
   },
 ];
@@ -870,6 +889,7 @@ export default function App() {
 
             {/* Idea info card */}
             <div style={S.card}>
+              {/* Header: tên + mã NV */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
                 <div>
                   <div style={{ fontSize: 11, letterSpacing: 2, color: "#64748b", textTransform: "uppercase", marginBottom: 6 }}>{idea.sheetName}</div>
@@ -881,14 +901,68 @@ export default function App() {
                 </div>
               </div>
               <div style={{ height: 1, background: "#bae6fd", margin: "16px 0" }} />
-              <div style={S.ideaMeta}>
-                {[["Level ý tưởng", idea.level], ["Thử nghiệm chưa", idea.thuNghiem], ["Phòng ban liên quan", idea.pbLienQuan], ["Vùng/Phòng ban", idea.vungPB]].map(([l, v]) => (
-                  <div key={l} style={S.metaItem}><div style={S.metaLabel}>{l}</div><div style={S.metaValue}>{v || "—"}</div></div>
-                ))}
-              </div>
-              {[["Vấn đề hiện tại", idea.vanDe], ["Mô tả ý tưởng", idea.moTa], ["Hiệu quả dự kiến", idea.hieuQua], ["Nguồn lực cần thiết", idea.nguonLuc], ["Giá trị mang lại", idea.giaTri]].map(([l, v]) => v ? (
-                <div key={l} style={S.fullField}><div style={S.metaLabel}>{l}</div><div style={{ ...S.metaValue, fontSize: 13, lineHeight: 1.7 }}>{v}</div></div>
-              ) : null)}
+
+              {/* Helper: render một cụm */}
+              {(() => {
+                const Cluster = ({ color, label, fields }: { color: string; label: string; fields: [string, any][] }) => {
+                  const visibleFields = fields.filter(([, v]) => v);
+                  if (visibleFields.length === 0) return null;
+                  return (
+                    <div style={{ marginBottom: 18 }}>
+                      <div style={{
+                        display: "inline-flex", alignItems: "center", gap: 6,
+                        background: color + "18", border: `1px solid ${color}40`,
+                        borderRadius: 6, padding: "3px 10px", marginBottom: 10,
+                      }}>
+                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: color, flexShrink: 0 }} />
+                        <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2, textTransform: "uppercase" as const, color }}>{label}</span>
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column" as const, gap: 8 }}>
+                        {visibleFields.map(([l, v]) => (
+                          <div key={l} style={{ background: "#f8fafc", border: "1px solid #e0f2fe", borderRadius: 8, padding: "10px 14px" }}>
+                            <div style={{ fontSize: 10, letterSpacing: 2, color: "#64748b", textTransform: "uppercase" as const, marginBottom: 4 }}>{l}</div>
+                            <div style={{ fontSize: 13, color: "#0f172a", fontWeight: 600, lineHeight: 1.7 }}>{v}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                };
+
+                return (
+                  <>
+                    <Cluster color="#ef4444" label="Hiện trạng & Vấn đề" fields={[
+                      ["Mô tả hiện trạng hoặc khó khăn/hạn chế hiện tại", idea.hienTrang],
+                      ["Tầm quan trọng của vấn đề", idea.tamQuanTrong],
+                    ]} />
+
+                    <Cluster color="#f97316" label="Mục tiêu" fields={[
+                      ["Mục tiêu chính", idea.mucTieu],
+                    ]} />
+
+                    <Cluster color="#0ea5e9" label="Giải pháp & Triển khai" fields={[
+                      ["Ý tưởng & cách triển khai", idea.yTuong],
+                      ["Kết quả kỳ vọng (SMART)", idea.ketQuaKyVong],
+                      ["Quy trình/lộ trình thực hiện", idea.loDinh],
+                      ["Các bộ phận liên quan & vai trò", idea.boPhanLienQuan],
+                      ["Ngân sách/chi phí dự kiến", idea.nganSach],
+                      ["Công cụ/công nghệ hỗ trợ", idea.congCu],
+                    ]} />
+
+                    <Cluster color="#16a34a" label="Tác động & Lợi ích" fields={[
+                      ["Tác động tới hiệu suất/công việc", idea.tacDong],
+                      ["Lợi ích định lượng", idea.loiIchDinhLuong],
+                      ["Lợi ích định tính", idea.loiIchDinhTinh],
+                    ]} />
+
+                    <Cluster color="#8b5cf6" label="Rủi ro & Đo lường" fields={[
+                      ["Các rủi ro có thể phát sinh", idea.ruiRo],
+                      ["Giải pháp dự phòng", idea.duPhong],
+                      ["Kế hoạch đo lường kết quả (KPIs)", idea.kpi],
+                    ]} />
+                  </>
+                );
+              })()}
             </div>
 
             {/* Scoring card */}
