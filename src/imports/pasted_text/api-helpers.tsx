@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import bgImage from "../KV_HÒ_YO_TA-01.jpeg";
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyD-ZjuCIn_j1XB91Hp20IU-PyTGahYXi9pwD1eum2dS5ACM0WYL1z83OTJAmGqdxTa/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzi35EqL8USV8HmDSDPtBq_BDFiEWXel03vNYMZDH2iNfYW47blK28sV2-SqIHWsVqw/exec";
 const USE_MOCK = false;
 const ADMIN_PIN = "1234";
 const LS_KEY = "hoYoTa_reviewers";
@@ -158,50 +158,6 @@ function markIdeaCompleted(ideaKey: string) {
     }
   } catch {}
 }
-
-const MOCK_IDEAS = [
-  {
-    sheetName: "Phòng Kinh Doanh", rowIndex: 2, maNV: "NV001",
-    tenYT: "Tự động hóa quy trình báo cáo bán hàng",
-    hienTrang: "Báo cáo bán hàng tốn nhiều thời gian, dễ sai sót do nhập liệu thủ công",
-    tamQuanTrong: "Ảnh hưởng trực tiếp đến độ chính xác của số liệu kinh doanh và thời gian ra quyết định",
-    mucTieu: "Tự động hóa toàn bộ quy trình báo cáo, giảm thời gian xử lý xuống dưới 30 phút/tuần",
-    yTuong: "Xây dựng dashboard tự động kết nối với CRM, cập nhật số liệu real-time",
-    ketQuaKyVong: "Tiết kiệm 10h/tuần, giảm 90% sai sót trong vòng 1 tháng triển khai",
-    loDinh: "Tuần 1: phân tích yêu cầu. Tuần 2: xây dựng dashboard. Tuần 3: test & training",
-    boPhanLienQuan: "Kinh doanh (cung cấp yêu cầu), IT (phát triển), Ban giám đốc (phê duyệt)",
-    nganSach: "Ước tính 20 triệu VND (nhân công IT nội bộ)",
-    congCu: "Google Data Studio, CRM API, Google Sheets",
-    tacDong: "Giảm tải công việc thủ công cho team kinh doanh, tăng thời gian tập trung vào bán hàng",
-    loiIchDinhLuong: "Tiết kiệm 10h/tuần × 52 tuần = 520h/năm ~ 26 triệu VND chi phí nhân công",
-    loiIchDinhTinh: "Dữ liệu chính xác hơn giúp cải thiện tinh thần team và niềm tin vào số liệu",
-    ruiRo: "API CRM có thể thay đổi, team không quen dùng công cụ mới",
-    duPhong: "Backup file Excel thủ công, tổ chức buổi training 2h cho toàn team",
-    kpi: "Thời gian làm báo cáo hàng tuần < 30 phút, tỷ lệ sai sót < 5%",
-    scoreA: "", scoreB: "", scoreC: "", scoreD: "", feedback: "",
-  },
-  {
-    sheetName: "Phòng Kỹ Thuật", rowIndex: 5, maNV: "NV102",
-    tenYT: "Hệ thống quản lý bảo trì máy móc thông minh",
-    hienTrang: "Không có lịch bảo trì rõ ràng, máy móc thường hỏng đột xuất gây gián đoạn sản xuất",
-    tamQuanTrong: "Downtime máy móc ảnh hưởng trực tiếp đến năng suất và chi phí sửa chữa khẩn cấp",
-    mucTieu: "Giảm 40% tỷ lệ downtime máy móc trong 6 tháng đầu triển khai",
-    yTuong: "Xây dựng app mobile quản lý lịch bảo trì định kỳ, cảnh báo sớm khi thiết bị cần kiểm tra",
-    ketQuaKyVong: "Giảm 40% thời gian downtime, tăng tuổi thọ máy móc thêm 20% trong năm đầu",
-    loDinh: "Tháng 1: setup app & nhập liệu máy móc. Tháng 2: vận hành thử. Tháng 3: đánh giá & tối ưu",
-    boPhanLienQuan: "Kỹ thuật (vận hành), Sản xuất (phản hồi), IT (hỗ trợ kỹ thuật app)",
-    nganSach: "App có sẵn (miễn phí), chi phí training: ~5 triệu VND",
-    congCu: "App UpKeep hoặc Fiix (bảo trì máy móc), điện thoại Android",
-    tacDong: "Kỹ thuật viên chủ động bảo trì thay vì chờ máy hỏng",
-    loiIchDinhLuong: "Giảm 40% chi phí sửa chữa khẩn cấp ~ tiết kiệm 50 triệu/năm",
-    loiIchDinhTinh: "Cải thiện văn hóa bảo trì chủ động, giảm căng thẳng cho đội kỹ thuật",
-    ruiRo: "Kỹ thuật viên không dùng app thường xuyên",
-    duPhong: "Gamification: bảng xếp hạng tuân thủ bảo trì, nhắc nhở tự động qua Zalo",
-    kpi: "% thiết bị được bảo trì đúng hạn ≥ 90%, số lần hỏng đột xuất giảm ≥ 40%",
-    scoreA: "", scoreB: "", scoreC: "", scoreD: "", feedback: "",
-  },
-];
-
 const mockAPI = {
   verifyReviewer: async (reviewerId: string) => {
     await new Promise(r => setTimeout(r, 0));
