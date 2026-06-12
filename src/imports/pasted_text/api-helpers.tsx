@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import bgImage from "../KV_HÒ_YO_TA-01.jpeg";
 
-const API_URL = "https://script.google.com/macros/s/AKfycbz4u4R_dnh3tgP4LWXMwJ1yhZ5d_RTC_-0e-_1j59jYNPxtHAR03fTt7tXrVzDIjs5h/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzxeBgm7jAdVaKsezNRuiucd5OkD5aBI8QmIbudZGc_mmH_ssRSpkfa3Hgfr0H72XCo/exec";
 const USE_MOCK = false;
 const ADMIN_PIN = "1234";
 const LS_KEY = "hoYoTa_reviewers";
@@ -655,6 +655,7 @@ export default function App() {
       scoreC: scores.scoreC, scoreD: scores.scoreD,
       feedback,
       reviewerName: reviewer.name,
+      nickname:     reviewer.nickname || "",
     };
 
     setSaveStatus("saving");
