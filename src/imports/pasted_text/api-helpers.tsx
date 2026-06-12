@@ -861,29 +861,33 @@ export default function App() {
               {/* Helper: render một cụm */}
               {(() => {
                 const Cluster = ({ color, label, fields }: { color: string; label: string; fields: [string, any][] }) => {
-                  const visibleFields = fields.filter(([, v]) => v);
-                  if (visibleFields.length === 0) return null;
-                  return (
-                    <div style={{ marginBottom: 18 }}>
-                      <div style={{
-                        display: "inline-flex", alignItems: "center", gap: 6,
-                        background: color + "18", border: `1px solid ${color}40`,
-                        borderRadius: 6, padding: "3px 10px", marginBottom: 10,
-                      }}>
-                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: color, flexShrink: 0 }} />
-                        <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2, textTransform: "uppercase" as const, color }}>{label}</span>
-                      </div>
-                      <div style={{ display: "flex", flexDirection: "column" as const, gap: 8 }}>
-                        {visibleFields.map(([l, v]) => (
-                          <div key={l} style={{ background: "#f8fafc", border: "1px solid #e0f2fe", borderRadius: 8, padding: "10px 14px" }}>
-                            <div style={{ fontSize: 10, letterSpacing: 2, color: "#64748b", textTransform: "uppercase" as const, marginBottom: 4 }}>{l}</div>
-                            <div style={{ fontSize: 13, color: "#0f172a", fontWeight: 600, lineHeight: 1.7 }}>{v}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                };
+  const visibleFields = fields.filter(([, v]) => v);
+  if (visibleFields.length === 0) return null;
+  
+  return (
+    <div style={{ marginBottom: 18 }}>
+      <div style={{
+        display: "inline-flex", alignItems: "center", gap: 6,
+        background: color + "18", border: `1px solid ${color}40`,
+        borderRadius: 6, padding: "3px 10px", marginBottom: 10,
+      }}>
+        <div style={{ width: 6, height: 6, borderRadius: "50%", background: color, flexShrink: 0 }} />
+        <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2, textTransform: "uppercase" as const, color }}>{label}</span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column" as const, gap: 8 }}>
+        {visibleFields.map(([l, v]) => (
+          <div key={l} style={{ background: "#f8fafc", border: "1px solid #e0f2fe", borderRadius: 8, padding: "10px 14px" }}>
+            <div style={{ fontSize: 10, letterSpacing: 2, color: "#64748b", textTransform: "uppercase" as const, marginBottom: 4 }}>{l}</div>
+            {/* ĐÃ THÊM whiteSpace: "pre-wrap" VÀO DÒNG BÊN DƯỚI */}
+            <div style={{ fontSize: 13, color: "#0f172a", fontWeight: 600, lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
+              {v}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
                 return (
                   <>
