@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import bgImage from "../KV_HÒ_YO_TA-01.jpeg";
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyx0gLbdZ-MK1kJXRWhU_bVacjiFojNcldSrh3EMt4wJoFUGRIKZh1MMrgHQNM4hCLq/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycby-ue8RdSeUQ1NLLhyYyD_RGtjxYhbe2CaSZBm4z5PfAjFaD4aW22M6fDGObYYxHeA/exec";
 const USE_MOCK = false;
 const ADMIN_PIN = "1234";
 const LS_KEY = "hoYoTa_reviewers";
@@ -158,6 +158,50 @@ function markIdeaCompleted(ideaKey: string) {
     }
   } catch {}
 }
+
+const MOCK_IDEAS = [
+  {
+    sheetName: "Phòng Kinh Doanh", rowIndex: 2, maNV: "NV001",
+    tenYT: "Tự động hóa quy trình báo cáo bán hàng",
+    hienTrang: "Báo cáo bán hàng tốn nhiều thời gian, dễ sai sót do nhập liệu thủ công",
+    tamQuanTrong: "Ảnh hưởng trực tiếp đến độ chính xác của số liệu kinh doanh và thời gian ra quyết định",
+    mucTieu: "Tự động hóa toàn bộ quy trình báo cáo, giảm thời gian xử lý xuống dưới 30 phút/tuần",
+    yTuong: "Xây dựng dashboard tự động kết nối với CRM, cập nhật số liệu real-time",
+    ketQuaKyVong: "Tiết kiệm 10h/tuần, giảm 90% sai sót trong vòng 1 tháng triển khai",
+    loDinh: "Tuần 1: phân tích yêu cầu. Tuần 2: xây dựng dashboard. Tuần 3: test & training",
+    boPhanLienQuan: "Kinh doanh (cung cấp yêu cầu), IT (phát triển), Ban giám đốc (phê duyệt)",
+    nganSach: "Ước tính 20 triệu VND (nhân công IT nội bộ)",
+    congCu: "Google Data Studio, CRM API, Google Sheets",
+    tacDong: "Giảm tải công việc thủ công cho team kinh doanh, tăng thời gian tập trung vào bán hàng",
+    loiIchDinhLuong: "Tiết kiệm 10h/tuần × 52 tuần = 520h/năm ~ 26 triệu VND chi phí nhân công",
+    loiIchDinhTinh: "Dữ liệu chính xác hơn giúp cải thiện tinh thần team và niềm tin vào số liệu",
+    ruiRo: "API CRM có thể thay đổi, team không quen dùng công cụ mới",
+    duPhong: "Backup file Excel thủ công, tổ chức buổi training 2h cho toàn team",
+    kpi: "Thời gian làm báo cáo hàng tuần < 30 phút, tỷ lệ sai sót < 5%",
+    scoreA: "", scoreB: "", scoreC: "", scoreD: "", feedback: "",
+  },
+  {
+    sheetName: "Phòng Kỹ Thuật", rowIndex: 5, maNV: "NV102",
+    tenYT: "Hệ thống quản lý bảo trì máy móc thông minh",
+    hienTrang: "Không có lịch bảo trì rõ ràng, máy móc thường hỏng đột xuất gây gián đoạn sản xuất",
+    tamQuanTrong: "Downtime máy móc ảnh hưởng trực tiếp đến năng suất và chi phí sửa chữa khẩn cấp",
+    mucTieu: "Giảm 40% tỷ lệ downtime máy móc trong 6 tháng đầu triển khai",
+    yTuong: "Xây dựng app mobile quản lý lịch bảo trì định kỳ, cảnh báo sớm khi thiết bị cần kiểm tra",
+    ketQuaKyVong: "Giảm 40% thời gian downtime, tăng tuổi thọ máy móc thêm 20% trong năm đầu",
+    loDinh: "Tháng 1: setup app & nhập liệu máy móc. Tháng 2: vận hành thử. Tháng 3: đánh giá & tối ưu",
+    boPhanLienQuan: "Kỹ thuật (vận hành), Sản xuất (phản hồi), IT (hỗ trợ kỹ thuật app)",
+    nganSach: "App có sẵn (miễn phí), chi phí training: ~5 triệu VND",
+    congCu: "App UpKeep hoặc Fiix (bảo trì máy móc), điện thoại Android",
+    tacDong: "Kỹ thuật viên chủ động bảo trì thay vì chờ máy hỏng",
+    loiIchDinhLuong: "Giảm 40% chi phí sửa chữa khẩn cấp ~ tiết kiệm 50 triệu/năm",
+    loiIchDinhTinh: "Cải thiện văn hóa bảo trì chủ động, giảm căng thẳng cho đội kỹ thuật",
+    ruiRo: "Kỹ thuật viên không dùng app thường xuyên",
+    duPhong: "Gamification: bảng xếp hạng tuân thủ bảo trì, nhắc nhở tự động qua Zalo",
+    kpi: "% thiết bị được bảo trì đúng hạn ≥ 90%, số lần hỏng đột xuất giảm ≥ 40%",
+    scoreA: "", scoreB: "", scoreC: "", scoreD: "", feedback: "",
+  },
+];
+
 const mockAPI = {
   verifyReviewer: async (reviewerId: string) => {
     await new Promise(r => setTimeout(r, 0));
@@ -655,7 +699,6 @@ export default function App() {
       scoreC: scores.scoreC, scoreD: scores.scoreD,
       feedback,
       reviewerName: reviewer.name,
-      nickname:     reviewer.nickname || "",
     };
 
     setSaveStatus("saving");
@@ -862,33 +905,29 @@ export default function App() {
               {/* Helper: render một cụm */}
               {(() => {
                 const Cluster = ({ color, label, fields }: { color: string; label: string; fields: [string, any][] }) => {
-  const visibleFields = fields.filter(([, v]) => v);
-  if (visibleFields.length === 0) return null;
-  
-  return (
-    <div style={{ marginBottom: 18 }}>
-      <div style={{
-        display: "inline-flex", alignItems: "center", gap: 6,
-        background: color + "18", border: `1px solid ${color}40`,
-        borderRadius: 6, padding: "3px 10px", marginBottom: 10,
-      }}>
-        <div style={{ width: 6, height: 6, borderRadius: "50%", background: color, flexShrink: 0 }} />
-        <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2, textTransform: "uppercase" as const, color }}>{label}</span>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column" as const, gap: 8 }}>
-        {visibleFields.map(([l, v]) => (
-          <div key={l} style={{ background: "#f8fafc", border: "1px solid #e0f2fe", borderRadius: 8, padding: "10px 14px" }}>
-            <div style={{ fontSize: 10, letterSpacing: 2, color: "#64748b", textTransform: "uppercase" as const, marginBottom: 4 }}>{l}</div>
-            {/* ĐÃ THÊM whiteSpace: "pre-wrap" VÀO DÒNG BÊN DƯỚI */}
-            <div style={{ fontSize: 13, color: "#0f172a", fontWeight: 600, lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
-              {v}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+                  const visibleFields = fields.filter(([, v]) => v);
+                  if (visibleFields.length === 0) return null;
+                  return (
+                    <div style={{ marginBottom: 18 }}>
+                      <div style={{
+                        display: "inline-flex", alignItems: "center", gap: 6,
+                        background: color + "18", border: `1px solid ${color}40`,
+                        borderRadius: 6, padding: "3px 10px", marginBottom: 10,
+                      }}>
+                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: color, flexShrink: 0 }} />
+                        <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2, textTransform: "uppercase" as const, color }}>{label}</span>
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column" as const, gap: 8 }}>
+                        {visibleFields.map(([l, v]) => (
+                          <div key={l} style={{ background: "#f8fafc", border: "1px solid #e0f2fe", borderRadius: 8, padding: "10px 14px" }}>
+                            <div style={{ fontSize: 10, letterSpacing: 2, color: "#64748b", textTransform: "uppercase" as const, marginBottom: 4 }}>{l}</div>
+                            <div style={{ fontSize: 13, color: "#0f172a", fontWeight: 600, lineHeight: 1.7 }}>{v}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                };
 
                 return (
                   <>
@@ -916,7 +955,7 @@ export default function App() {
                       ["Lợi ích định tính", idea.loiIchDinhTinh],
                     ]} />
 
-                    <Cluster color="#8b5cf6" label="Rủi ro" fields={[
+                    <Cluster color="#8b5cf6" label="Rủi ro & Đo lường" fields={[
                       ["Các rủi ro có thể phát sinh", idea.ruiRo],
                       ["Giải pháp dự phòng", idea.duPhong],
                       ["Kế hoạch đo lường kết quả (KPIs)", idea.kpi],
@@ -1276,17 +1315,11 @@ export default function App() {
               onClick={() => { setStep("login"); setPreview(null); setReviewerId(""); setIdeas([]); setReviewer(null); setAssignmentStats({}); setSelectedIdeas([]); setSelectedAssignee(""); }}>
               ← Quay lại trang chủ
             </button>
-            <button style={{ ...S.btnPrimary, padding: "12px 28px" }}
-              onClick={handleGoToTracking} disabled={loadingTracking}>
-              {loadingTracking
-                ? <><span className="spinner" /><span>Đang tải...</span></>
-                : "📊 Theo dõi tiến độ chấm"}
-            </button>
             {mySheetUrl && (
               <a href={mySheetUrl} target="_blank" rel="noreferrer"
                 style={{ ...S.btnPrimary, padding: "12px 28px", textDecoration: "none", display: "inline-block",
                   background: "linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)", width: "100%", textAlign: "center", boxSizing: "border-box" }}>
-                📄 Xem sheet chấm của tôi
+                📄 Theo dõi tiến độ chấm của BTĐ
               </a>
             )}
           </div>
