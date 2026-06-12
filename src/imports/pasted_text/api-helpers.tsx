@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import bgImage from "../KV_HÒ_YO_TA-01.jpeg";
-import boatImage from "../boat.png";
 
 const API_URL = "https://script.google.com/macros/s/AKfycby-ue8RdSeUQ1NLLhyYyD_RGtjxYhbe2CaSZBm4z5PfAjFaD4aW22M6fDGObYYxHeA/exec";
 const USE_MOCK = false;
@@ -10,9 +9,7 @@ const LS_KEY_ASSIGNERS = "hoYoTa_assigners";
 const LS_KEY_ASSIGNMENTS = "hoYoTa_assignments";
 const LS_KEY_PROGRESS = "hoYoTa_progress";
 const LS_KEY_COMPLETED = "hoYoTa_completed";
-const PROGRESS_TRACKING_URL = "https://docs.google.com/spreadsheets/d/1NCqI0No-6-r5Ou1ZfrVc9ndGcXVcPih1D2hRoeMZ1tQ/edit?gid=709116352#gid=709116352";
 
-// ═══ DANH SÁCH CỐ ĐỊNH — không phụ thuộc localStorage ═══
 const DEFAULT_REVIEWERS = [
   { reviewerId: "YD0001",  name: "Nguyễn Việt Hòa" },
   { reviewerId: "FGG0001", name: "Nguyễn Kim Thanh" },
@@ -88,8 +85,6 @@ interface Progress {
   savedAt: string;
 }
 
-// localStorage chỉ dùng cho Admin thêm/xóa thành viê
-// Login luôn dùng DEFAULT_REVIEWERS
 function loadReviewers(): { reviewerId: string; name: string }[] {
   try {
     const raw = localStorage.getItem(LS_KEY);
@@ -97,11 +92,9 @@ function loadReviewers(): { reviewerId: string; name: string }[] {
   } catch {}
   return DEFAULT_REVIEWERS;
 }
-
 function saveReviewers(list: { reviewerId: string; name: string }[]) {
   localStorage.setItem(LS_KEY, JSON.stringify(list));
 }
-
 function loadAssigners(): Assigner[] {
   try {
     const raw = localStorage.getItem(LS_KEY_ASSIGNERS);
@@ -109,11 +102,9 @@ function loadAssigners(): Assigner[] {
   } catch {}
   return [];
 }
-
 function saveAssigners(list: Assigner[]) {
   localStorage.setItem(LS_KEY_ASSIGNERS, JSON.stringify(list));
 }
-
 function loadAssignments(): Assignment[] {
   try {
     const raw = localStorage.getItem(LS_KEY_ASSIGNMENTS);
@@ -121,11 +112,9 @@ function loadAssignments(): Assignment[] {
   } catch {}
   return [];
 }
-
 function saveAssignments(list: Assignment[]) {
   localStorage.setItem(LS_KEY_ASSIGNMENTS, JSON.stringify(list));
 }
-
 function loadProgress(reviewerId: string): Progress | null {
   try {
     const raw = localStorage.getItem(LS_KEY_PROGRESS);
@@ -135,7 +124,6 @@ function loadProgress(reviewerId: string): Progress | null {
   } catch {}
   return null;
 }
-
 function saveProgress(progress: Progress) {
   try {
     const raw = localStorage.getItem(LS_KEY_PROGRESS);
@@ -145,7 +133,6 @@ function saveProgress(progress: Progress) {
     localStorage.setItem(LS_KEY_PROGRESS, JSON.stringify(allProgress));
   } catch {}
 }
-
 function clearProgress(reviewerId: string) {
   try {
     const raw = localStorage.getItem(LS_KEY_PROGRESS);
@@ -155,7 +142,6 @@ function clearProgress(reviewerId: string) {
     localStorage.setItem(LS_KEY_PROGRESS, JSON.stringify(allProgress));
   } catch {}
 }
-
 function loadCompletedIdeas(): string[] {
   try {
     const raw = localStorage.getItem(LS_KEY_COMPLETED);
@@ -163,7 +149,6 @@ function loadCompletedIdeas(): string[] {
   } catch {}
   return [];
 }
-
 function markIdeaCompleted(ideaKey: string) {
   try {
     const completed = loadCompletedIdeas();
@@ -176,76 +161,39 @@ function markIdeaCompleted(ideaKey: string) {
 
 const MOCK_IDEAS = [
   {
-    sheetName: "Phòng Kinh Doanh",
-    rowIndex: 2,
-    maNV: "NV001",
-    tenYT: "Tự động hóa quy trình báo cáo bán hàng",
-    level: "Cải tiến quy trình",
-    thuNghiem: "Chưa",
-    pbLienQuan: "Kinh doanh, IT",
-    vungPB: "Vùng 1",
+    sheetName: "Phòng Kinh Doanh", rowIndex: 2, maNV: "NV001",
+    tenYT: "Tự động hóa quy trình báo cáo bán hàng", level: "Cải tiến quy trình",
+    thuNghiem: "Chưa", pbLienQuan: "Kinh doanh, IT", vungPB: "Vùng 1",
     vanDe: "Báo cáo bán hàng tốn nhiều thời gian, dễ sai sót do nhập liệu thủ công",
     moTa: "Xây dựng dashboard tự động kết nối với CRM, cập nhật số liệu real-time",
-    hieuQua: "Tiết kiệm 10h/tuần, giảm 90% sai sót",
-    nguonLuc: "1 developer, 2 tuần",
-    giaTri: "Tăng hiệu suất team, dữ liệu chính xác hơn cho quyết định",
-    link: "https://example.com/doc1",
-    scoreN: "", scoreO: "", scoreP: "", scoreQ: "",
-    goodJob: false, baoVe: false, feedback: "",
+    hieuQua: "Tiết kiệm 10h/tuần, giảm 90% sai sót", nguonLuc: "1 developer, 2 tuần",
+    giaTri: "Tăng hiệu suất team, dữ liệu chính xác hơn cho quyết định", link: "",
+    scoreA: "", scoreB: "", scoreC: "", scoreD: "", feedback: "",
   },
   {
-    sheetName: "Phòng Kỹ Thuật",
-    rowIndex: 5,
-    maNV: "NV102",
-    tenYT: "Hệ thống quản lý bảo trì máy móc thông minh",
-    level: "Sáng tạo mới",
-    thuNghiem: "Đã thử nghiệm",
-    pbLienQuan: "Kỹ thuật, Sản xuất",
-    vungPB: "Vùng 2",
+    sheetName: "Phòng Kỹ Thuật", rowIndex: 5, maNV: "NV102",
+    tenYT: "Hệ thống quản lý bảo trì máy móc thông minh", level: "Sáng tạo mới",
+    thuNghiem: "Đã thử nghiệm", pbLienQuan: "Kỹ thuật, Sản xuất", vungPB: "Vùng 2",
     vanDe: "Không có lịch bảo trì rõ ràng, máy móc thường hỏng đột xuất gây gián đoạn sản xuất",
     moTa: "Xây dựng app mobile quản lý lịch bảo trì định kỳ, cảnh báo sớm khi thiết bị cần kiểm tra",
     hieuQua: "Giảm 40% thời gian downtime, tăng tuổi thọ máy móc",
     nguonLuc: "App có sẵn, cần 1 tuần setup và training",
-    giaTri: "Tăng năng suất sản xuất, giảm chi phí sửa chữa khẩn cấp",
-    link: "",
-    scoreN: "", scoreO: "", scoreP: "", scoreQ: "",
-    goodJob: false, baoVe: false, feedback: "",
-  },
-  {
-    sheetName: "Phòng Kinh Doanh",
-    rowIndex: 8,
-    maNV: "NV045",
-    tenYT: "Chương trình khách hàng thân thiết",
-    level: "Cải tiến sản phẩm/dịch vụ",
-    thuNghiem: "Chưa",
-    pbLienQuan: "Kinh doanh, Marketing",
-    vungPB: "Toàn công ty",
-    vanDe: "Tỷ lệ khách hàng quay lại thấp, chưa có chính sách ưu đãi rõ ràng",
-    moTa: "Thiết lập hệ thống điểm thưởng cho khách hàng mua nhiều lần, tích hợp với app mobile",
-    hieuQua: "Tăng 25% tỷ lệ khách hàng quay lại",
-    nguonLuc: "Ngân sách marketing, phát triển tính năng trên app",
-    giaTri: "Tăng doanh thu từ khách hàng cũ, xây dựng lòng trung thành thương hiệu",
-    link: "https://example.com/loyalty-program",
-    scoreN: "", scoreO: "", scoreP: "", scoreQ: "",
-    goodJob: false, baoVe: false, feedback: "",
+    giaTri: "Tăng năng suất sản xuất, giảm chi phí sửa chữa khẩn cấp", link: "",
+    scoreA: "", scoreB: "", scoreC: "", scoreD: "", feedback: "",
   },
 ];
 
 const mockAPI = {
-  // ═══ FIX: luôn dùng DEFAULT_REVIEWERS, không dùng localStorage ═══
   verifyReviewer: async (reviewerId: string) => {
     await new Promise(r => setTimeout(r, 0));
     const trimmedId = reviewerId.trim().toUpperCase();
-
     const reviewer = DEFAULT_REVIEWERS.find(r => r.reviewerId === trimmedId);
     if (!reviewer) return { ok: false, error: "Mã không hợp lệ" };
-
     const assigners = loadAssigners();
     const isAssigner = assigners.some(a => a.reviewerId === trimmedId);
     const assignments = loadAssignments();
     const completed = loadCompletedIdeas();
     const assignedIdeas = assignments.filter(a => a.assignedTo === trimmedId);
-
     let pendingCount = 0;
     if (assignments.length > 0) {
       pendingCount = assignedIdeas.filter(a => !completed.includes(a.ideaKey)).length;
@@ -255,10 +203,8 @@ const mockAPI = {
         return !completed.includes(ideaKey);
       }).length;
     }
-
     return { ok: true, ...reviewer, pendingCount, isAssigner };
   },
-
   getIdeas: async (reviewerId: string) => {
     await new Promise(r => setTimeout(r, 0));
     const assignments = loadAssignments();
@@ -267,7 +213,6 @@ const mockAPI = {
     const isAssigner = assigners.some(a => a.reviewerId === reviewerId);
     const assignedIdeas = assignments.filter(a => a.assignedTo === reviewerId);
     let ideas = [...MOCK_IDEAS];
-
     if (assignments.length > 0) {
       ideas = ideas.filter(idea => {
         const ideaKey = `${idea.sheetName}_${idea.rowIndex}`;
@@ -279,10 +224,8 @@ const mockAPI = {
         return !completed.includes(ideaKey);
       });
     }
-
     return { ok: true, ideas, isAssigner };
   },
-
   submitScore: async (data: any) => {
     await new Promise(r => setTimeout(r, 0));
     console.log("📊 Đã lưu điểm:", data);
@@ -290,7 +233,6 @@ const mockAPI = {
     markIdeaCompleted(ideaKey);
     return { ok: true };
   },
-
   assignIdea: async (data: { ideaKey: string; assignedTo: string; assignedBy: string }) => {
     await new Promise(r => setTimeout(r, 0));
     const assignments = loadAssignments();
@@ -299,7 +241,6 @@ const mockAPI = {
     saveAssignments(assignments);
     return { ok: true };
   },
-
   getUnassignedIdeas: async () => {
     await new Promise(r => setTimeout(r, 0));
     const assignments = loadAssignments();
@@ -335,55 +276,55 @@ const api = {
   },
 };
 
+// ══ TIÊU CHÍ MỚI (4 tiêu chí, tổng 10 điểm) ══
 const CRITERIA = [
   {
-    key: "scoreN",
-    label: "Tính rõ ràng",
-    desc: "Vấn đề nêu có cụ thể, dễ hiểu, không mơ hồ",
+    key: "scoreA",
+    label: "Tính mới mẻ / sáng tạo",
+    desc: "Ý tưởng có điểm khác biệt so với cách làm hiện tại",
     max: 2,
     options: [
-      { val: 0, label: "0 — Không rõ ràng" },
-      { val: 1, label: "1 — Tương đối rõ" },
-      { val: 2, label: "2 — Rất rõ ràng" },
+      { val: 0, label: "0 — Không mới" },
+      { val: 1, label: "1 — Có điểm mới" },
+      { val: 2, label: "2 — Rất sáng tạo" },
     ],
   },
   {
-    key: "scoreO",
-    label: "Tính phù hợp",
-    desc: "Liên quan trực tiếp đến công việc, quy trình, hoạt động",
-    max: 2,
-    options: [
-      { val: 0, label: "0 — Không phù hợp" },
-      { val: 1, label: "1 — Phù hợp một phần" },
-      { val: 2, label: "2 — Rất phù hợp" },
-    ],
-  },
-  {
-    key: "scoreP",
-    label: "Khả thi bước đầu",
-    desc: "Ý tưởng nghe có lý, có thể ứng dụng ngay tại BP/PB/Vùng",
-    max: 2,
+    key: "scoreB",
+    label: "Tính khả thi chi tiết",
+    desc: "Có lộ trình, giải pháp cụ thể, nguồn lực hợp lý",
+    max: 3,
     options: [
       { val: 0, label: "0 — Không khả thi" },
       { val: 1, label: "1 — Ít khả thi" },
-      { val: 2, label: "2 — Khả thi" },
+      { val: 2, label: "2 — Tương đối" },
+      { val: 3, label: "3 — Rất khả thi" },
     ],
   },
   {
-    key: "scoreQ",
-    label: "Tác động tiềm năng",
-    desc: "Cá nhân/CH/BP: 2đ · Vùng/PB: 3đ · Công ty: 4đ",
-    max: 4,
+    key: "scoreC",
+    label: "Hiệu quả dự kiến",
+    desc: "Có số liệu ước tính (thời gian tiết kiệm, chi phí giảm, doanh thu tăng, mức độ hài lòng khách hàng)",
+    max: 3,
     options: [
-      { val: 0, label: "0 — Không có tác động" },
-      { val: 2, label: "2 — Cá nhân / CH / BP" },
-      { val: 3, label: "3 — Vùng / Phòng ban" },
-      { val: 4, label: "4 — Toàn công ty" },
+      { val: 0, label: "0 — Không có số liệu" },
+      { val: 1, label: "1 — Sơ lược" },
+      { val: 2, label: "2 — Có số liệu" },
+      { val: 3, label: "3 — Rõ ràng, thuyết phục" },
+    ],
+  },
+  {
+    key: "scoreD",
+    label: "Phạm vi & tác động",
+    desc: "Ảnh hưởng đến nhiều bộ phận/khách hàng, mang lại giá trị dài hạn",
+    max: 2,
+    options: [
+      { val: 0, label: "0 — Hạn chế" },
+      { val: 1, label: "1 — Một bộ phận" },
+      { val: 2, label: "2 — Rộng & lâu dài" },
     ],
   },
 ];
-
-const GOODJOB_THRESHOLD = 7;
 
 const S: Record<string, any> = {
   page: {
@@ -394,44 +335,28 @@ const S: Record<string, any> = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: "0 16px 60px",},
-    overflowX: "hidden",
+    padding: "0 16px 60px",
+  },
   topBar: {
-    width: "100%",
-    maxWidth: 800,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
+    width: "100%", maxWidth: 800,
+    display: "flex", alignItems: "center", justifyContent: "space-between",
     padding: "20px 0 8px",
-    borderBottom: "1px solid #bae6fd",
-    marginBottom: 32,
+    borderBottom: "1px solid #bae6fd", marginBottom: 32,
   },
   logo: {
-    fontSize: 13,
-    fontWeight: 800,
-    letterSpacing: 3,
-    color: "#c00000",
-    textTransform: "uppercase" as const,
+    fontSize: 13, fontWeight: 800, letterSpacing: 3,
+    color: "#c00000", textTransform: "uppercase" as const,
   },
   badge: {
-    background: "#ffffff",
-    border: "1px solid #bae6fd",
-    borderRadius: 20,
-    padding: "4px 14px",
-    fontSize: 12,
-    color: "#0369a1",
-    fontWeight: 600,
+    background: "#ffffff", border: "1px solid #bae6fd",
+    borderRadius: 20, padding: "4px 14px", fontSize: 12, color: "#0369a1", fontWeight: 600,
   },
   card: {
-    width: "100%",
-    maxWidth: 800,
+    width: "100%", maxWidth: 800,
     background: "rgba(255, 255, 255, 0.7)",
-    backdropFilter: "blur(12px)",
-    WebkitBackdropFilter: "blur(12px)",
-    border: "1px solid #bae6fd",
-    borderRadius: 16,
-    padding: "36px 40px",
-    marginBottom: 20,
+    backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+    border: "1px solid #bae6fd", borderRadius: 16,
+    padding: "36px 40px", marginBottom: 20,
     boxShadow: "0 4px 24px rgba(14,165,233,0.08)",
   },
   h1: { fontSize: 26, fontWeight: 800, margin: "0 0 6px", letterSpacing: -0.5, color: "#0f172a" },
@@ -477,9 +402,9 @@ const S: Record<string, any> = {
   criteriaHeader: { display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 },
   criteriaLabel: { fontWeight: 800, fontSize: 14, color: "#0f172a" },
   criteriaDesc: { fontSize: 11, color: "#64748b", marginBottom: 10 },
-  optionRow: { display: "flex", gap: 8, width: "100%" },
+  optionRow: { display: "flex", gap: 8, width: "100%", flexWrap: "wrap" as const },
   optionBtn: (selected: boolean) => ({
-    flex: 1, padding: "10px 8px", borderRadius: 8,
+    flex: 1, minWidth: 100, padding: "10px 8px", borderRadius: 8,
     border: selected ? "2px solid #0ea5e9" : "1.5px solid #bae6fd",
     background: selected ? "#e0f2fe" : "#f8fafc",
     color: selected ? "#0284c7" : "#64748b",
@@ -496,25 +421,14 @@ const S: Record<string, any> = {
   },
   scoreBig: (val: number) => ({
     fontSize: 32, fontWeight: 900,
-    color: val >= GOODJOB_THRESHOLD ? "#16a34a" : val >= 3 ? "#d97706" : "#ef4444",
+    color: val >= 7 ? "#16a34a" : val >= 4 ? "#d97706" : "#ef4444",
   }),
-  checkboxRow: { display: "flex", gap: 12, marginBottom: 24 },
-  checkCard: (active: boolean, color: string) => ({
-    flex: 1, padding: "14px 18px", borderRadius: 10,
-    border: active ? `2px solid ${color}` : "1.5px solid #bae6fd",
-    background: active ? (color === "#16a34a" ? "#f0fdf4" : "#eff6ff") : "#f8fafc",
-    cursor: "pointer", transition: "all .2s", textAlign: "center" as const,
-    boxShadow: active ? `0 4px 14px ${color}30` : "none",
-  }),
-  progress: { 
-  width: "100%", 
-  maxWidth: 800, 
-  marginBottom: 20,
-  background: "rgba(255,255,255,0.7)",
-  backdropFilter: "blur(8px)",
-  borderRadius: 10,
-  padding: "8px 12px",
-},
+  progress: {
+    width: "100%", maxWidth: 800, marginBottom: 20,
+    background: "rgba(255,255,255,0.7)",
+    backdropFilter: "blur(8px)",
+    borderRadius: 10, padding: "8px 12px",
+  },
   progressBar: { height: 4, background: "#bae6fd", borderRadius: 99, overflow: "hidden", marginTop: 8 },
   progressFill: (pct: number) => ({
     height: "100%", width: `${pct}%`,
@@ -539,13 +453,11 @@ export default function App() {
   const [ideas, setIdeas]           = useState<any[]>([]);
   const [current, setCurrent]       = useState(0);
   const [scores, setScores]         = useState<Record<string, number | null>>({});
-  const [goodJob, setGoodJob]       = useState(false);
-  const [baoVe, setBaoVe]           = useState(false);
   const [feedback, setFeedback]     = useState("");
   const [loading, setLoading]       = useState(false);
   const [error, setError]           = useState("");
   const [preview, setPreview]       = useState<any>(null);
-  const inputRef = useRef<HTMLInputElement>(null); const topRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [mySheetUrl, setMySheetUrl] = useState<string | null>(null);
 
   const [unassignedIdeas, setUnassignedIdeas] = useState<any[]>([]);
@@ -553,18 +465,19 @@ export default function App() {
   const [selectedIdeas, setSelectedIdeas] = useState<any[]>([]);
   const [selectedAssignee, setSelectedAssignee] = useState("");
   const [assignmentStats, setAssignmentStats] = useState<Record<string, number>>({});
-const [trackingStats, setTrackingStats] = useState<any[]>([]);
-const [loadingTracking, setLoadingTracking] = useState(false);
+  const [trackingStats, setTrackingStats] = useState<any[]>([]);
+  const [loadingTracking, setLoadingTracking] = useState(false);
 
-const handleGoToTracking = async () => {
-  setStep("tracking");        // ← chuyển trang NGAY
-  setLoadingTracking(true);
-  try {
-    const res = await api.get({ action: "getTracking" });
-    if (res.ok) setTrackingStats(res.stats);
-  } catch {}
-  setLoadingTracking(false);
-};
+  const handleGoToTracking = async () => {
+    setStep("tracking");
+    setLoadingTracking(true);
+    try {
+      const res = await api.get({ action: "getTracking" });
+      if (res.ok) setTrackingStats(res.stats);
+    } catch {}
+    setLoadingTracking(false);
+  };
+
   const [adminPin, setAdminPin]           = useState("");
   const [adminUnlocked, setAdminUnlocked] = useState(false);
   const [newYD, setNewYD]                 = useState("");
@@ -575,105 +488,85 @@ const handleGoToTracking = async () => {
   const [adminTab, setAdminTab]           = useState<"reviewers" | "assigners">("reviewers");
   const [newAssignerYD, setNewAssignerYD] = useState("");
   const [selectedAdminAssignees, setSelectedAdminAssignees] = useState<string[]>([]);
-  const [canXet, setCanXet] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle"|"saving"|"saved"|"error">("idle");
+
+  // Load saved scores when switching ideas
   useEffect(() => {
     if (!ideas[current]) return;
     const idea = ideas[current];
     setScores({
-      scoreN: idea.scoreN !== "" ? idea.scoreN : null,
-      scoreO: idea.scoreO !== "" ? idea.scoreO : null,
-      scoreP: idea.scoreP !== "" ? idea.scoreP : null,
-      scoreQ: idea.scoreQ !== "" ? idea.scoreQ : null,
+      scoreA: idea.scoreA !== "" ? idea.scoreA : null,
+      scoreB: idea.scoreB !== "" ? idea.scoreB : null,
+      scoreC: idea.scoreC !== "" ? idea.scoreC : null,
+      scoreD: idea.scoreD !== "" ? idea.scoreD : null,
     });
-    setGoodJob(idea.goodJob || false);
-    setBaoVe(idea.baoVe || false);
     setFeedback(idea.feedback || "");
-    setCanXet(idea.canXet || false);
   }, [current, ideas]);
 
+  // Scroll to top when switching ideas
   useEffect(() => {
-  if (step === "scoring") {
-    requestAnimationFrame(() => {
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    });
-  }
-}, [current, step]);
+    if (step === "scoring") {
+      requestAnimationFrame(() => {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      });
+    }
+  }, [current, step]);
 
+  // Auto-save progress
   useEffect(() => {
-  if (!reviewer || step !== "scoring" || !ideas[current]) return;
-  const hasScores = Object.values(scores).some(s => s !== null && s !== undefined);
-  if (!hasScores) return;
-
-  const idea = ideas[current]; // ← phải có dòng này TRƯỚC khi dùng idea
-  const progress: Progress = {
-    reviewerId: reviewer.reviewerId,
-    currentIndex: current,
-    currentIdeaKey: `${idea.sheetName}_${idea.rowIndex}`,
-    scores: { ...scores, goodJob, baoVe, canXet, feedback },
-    savedAt: new Date().toISOString(),
-  };
-  saveProgress(progress);
-}, [scores, goodJob, baoVe, canXet, feedback, current, reviewer, step, ideas]);
+    if (!reviewer || step !== "scoring" || !ideas[current]) return;
+    const hasScores = Object.values(scores).some(s => s !== null && s !== undefined);
+    if (!hasScores) return;
+    const idea = ideas[current];
+    const progress: Progress = {
+      reviewerId: reviewer.reviewerId,
+      currentIndex: current,
+      currentIdeaKey: `${idea.sheetName}_${idea.rowIndex}`,
+      scores: { ...scores, feedback },
+      savedAt: new Date().toISOString(),
+    };
+    saveProgress(progress);
+  }, [scores, feedback, current, reviewer, step, ideas]);
 
   const totalScore = CRITERIA.reduce((s, c) => s + (scores[c.key] ?? 0), 0);
   const allScored  = CRITERIA.every((c) => scores[c.key] !== null && scores[c.key] !== undefined);
 
-  useEffect(() => {
-    if (allScored) setGoodJob(totalScore >= GOODJOB_THRESHOLD);
-  }, [totalScore, allScored]);
-
   const handleVerify = async () => {
     if (!reviewerId.trim()) return;
-    setLoading(true);
-    setError("");
+    setLoading(true); setError("");
     try {
       const res = await api.get({ action: "verifyReviewer", reviewerId: reviewerId.trim() });
-      if (res.ok) {
-        setPreview(res);
-      } else {
-        setError(res.error || "Mã không hợp lệ");
-      }
-    } catch {
-      setError("Lỗi kết nối. Vui lòng thử lại.");
-    }
+      if (res.ok) { setPreview(res); }
+      else { setError(res.error || "Mã không hợp lệ"); }
+    } catch { setError("Lỗi kết nối. Vui lòng thử lại."); }
     setLoading(false);
   };
 
   const handleStart = async () => {
-  setLoading(true);
-  setLoadingIdeas(true);  // ← thêm
-  setError("");
-  try {
-    const res = await api.get({ action: "getIdeas", reviewerId: preview.reviewerId });
-    if (res.ok) {
-      setReviewer(preview);
-      setIdeas(res.ideas);
-      if (res.sheetUrl) setMySheetUrl(res.sheetUrl);
-      const savedProgress = loadProgress(preview.reviewerId);
-      if (savedProgress && res.ideas.length > 0) {
-        if (savedProgress.currentIdeaKey) {
-          const idx = res.ideas.findIndex(
-            idea => `${idea.sheetName}_${idea.rowIndex}` === savedProgress.currentIdeaKey
-          );
-          setCurrent(idx >= 0 ? idx : 0);
-        } else {
-          setCurrent(Math.min(savedProgress.currentIndex, res.ideas.length - 1));
-        }
-      } else {
-        setCurrent(0);
-      }
-      setStep(res.ideas.length === 0 ? "done" : "scoring");
-    } else {
-      setError(res.error || "Không lấy được dữ liệu");
-    }
-  } catch {
-    setError("Lỗi kết nối.");
-  }
-  setLoading(false);
-  setLoadingIdeas(false);  // ← thêm
-};
+    setLoading(true); setLoadingIdeas(true); setError("");
+    try {
+      const res = await api.get({ action: "getIdeas", reviewerId: preview.reviewerId });
+      if (res.ok) {
+        setReviewer(preview);
+        setIdeas(res.ideas);
+        if (res.sheetUrl) setMySheetUrl(res.sheetUrl);
+        const savedProgress = loadProgress(preview.reviewerId);
+        if (savedProgress && res.ideas.length > 0) {
+          if (savedProgress.currentIdeaKey) {
+            const idx = res.ideas.findIndex(
+              (idea: any) => `${idea.sheetName}_${idea.rowIndex}` === savedProgress.currentIdeaKey
+            );
+            setCurrent(idx >= 0 ? idx : 0);
+          } else {
+            setCurrent(Math.min(savedProgress.currentIndex, res.ideas.length - 1));
+          }
+        } else { setCurrent(0); }
+        setStep(res.ideas.length === 0 ? "done" : "scoring");
+      } else { setError(res.error || "Không lấy được dữ liệu"); }
+    } catch { setError("Lỗi kết nối."); }
+    setLoading(false); setLoadingIdeas(false);
+  };
 
   const handleAdminUnlock = () => {
     if (adminPin === ADMIN_PIN) { setAdminUnlocked(true); setAdminError(""); }
@@ -685,15 +578,13 @@ const handleGoToTracking = async () => {
     if (!yd || !newName.trim()) { setAdminError("Vui lòng nhập đủ Mã YD và Tên."); return; }
     if (reviewerList.some(r => r.reviewerId === yd)) { setAdminError("Mã YD này đã tồn tại."); return; }
     const updated = [...reviewerList, { reviewerId: yd, name: newName.trim() }];
-    setReviewerList(updated);
-    saveReviewers(updated);
+    setReviewerList(updated); saveReviewers(updated);
     setNewYD(""); setNewName(""); setAdminError("");
   };
 
   const handleDeleteReviewer = (ydCode: string) => {
     const updated = reviewerList.filter(r => r.reviewerId !== ydCode);
-    setReviewerList(updated);
-    saveReviewers(updated);
+    setReviewerList(updated); saveReviewers(updated);
   };
 
   const handleAddAssigner = () => {
@@ -704,23 +595,19 @@ const handleGoToTracking = async () => {
     const rev = reviewerList.find(r => r.reviewerId === yd);
     if (!rev) { setAdminError("Mã YD không tồn tại trong danh sách thành viên."); return; }
     const updated = [...assignerList, { reviewerId: yd, name: rev.name, assignees: selectedAdminAssignees }];
-    setAssignerList(updated);
-    saveAssigners(updated);
+    setAssignerList(updated); saveAssigners(updated);
     setNewAssignerYD(""); setSelectedAdminAssignees([]); setAdminError("");
   };
 
   const handleDeleteAssigner = (ydCode: string) => {
     const updated = assignerList.filter(a => a.reviewerId !== ydCode);
-    setAssignerList(updated);
-    saveAssigners(updated);
+    setAssignerList(updated); saveAssigners(updated);
   };
 
   const toggleAssignee = (ydCode: string) => {
-    if (selectedAdminAssignees.includes(ydCode)) {
+    if (selectedAdminAssignees.includes(ydCode))
       setSelectedAdminAssignees(selectedAdminAssignees.filter(id => id !== ydCode));
-    } else {
-      setSelectedAdminAssignees([...selectedAdminAssignees, ydCode]);
-    }
+    else setSelectedAdminAssignees([...selectedAdminAssignees, ydCode]);
   };
 
   const exitAdmin = () => {
@@ -779,237 +666,209 @@ const handleGoToTracking = async () => {
   const pct = ideas.length ? Math.round((current / ideas.length) * 100) : 0;
 
   const handleSubmitScore = async () => {
-  if (!allScored) { setError("Vui lòng chấm đủ 4 tiêu chí."); return; }
-  setError("");
+    if (!allScored) { setError("Vui lòng chấm đủ 4 tiêu chí."); return; }
+    setError("");
 
-  const idea = ideas[current];
-  const postBody = {
-    action: "submitScore",
-    ideaId:       idea.id,
-    sheetName:    idea.sheetName,
-    rowIndex:     idea.rowIndex,
-    reviewerId:   reviewer.reviewerId,
-    scoreN: scores.scoreN, scoreO: scores.scoreO,
-    scoreP: scores.scoreP, scoreQ: scores.scoreQ,
-    goodJob, baoVe, canXet, feedback,
-    reviewerName: reviewer.name,
-  };
+    const idea = ideas[current];
+    const postBody = {
+      action: "submitScore",
+      ideaId:       idea.id,
+      sheetName:    idea.sheetName,
+      rowIndex:     idea.rowIndex,
+      reviewerId:   reviewer.reviewerId,
+      scoreA: scores.scoreA, scoreB: scores.scoreB,
+      scoreC: scores.scoreC, scoreD: scores.scoreD,
+      feedback,
+      reviewerName: reviewer.name,
+    };
 
-  // ── Chuyển trang NGAY, không chờ GAS ──
-  setSaveStatus("saving");
-  if (current + 1 >= ideas.length) {
-    clearProgress(reviewer.reviewerId);
-    setStep("done");
-  } else {
-    setCurrent(c => c + 1);
-  }
-
-  // ── Lưu ngầm phía sau ──
-try {
-  const res = await api.post(postBody);
-  if (res.ok) {
-    setSaveStatus("saved");
-    setTimeout(() => setSaveStatus("idle"), 3000); // ✅ thêm dòng này
+    setSaveStatus("saving");
+    if (current + 1 >= ideas.length) {
+      clearProgress(reviewer.reviewerId);
+      setStep("done");
     } else {
-    setSaveStatus("error");
-    setTimeout(() => setSaveStatus("idle"), 5000);
-    console.error("❌ Lưu thất bại:", res.error);
-  }           // ← thêm dấu } đóng else
-} catch {
-  setSaveStatus("error");
-  setTimeout(() => setSaveStatus("idle"), 5000);   // ✅ thêm dòng này
-  console.error("❌ Lỗi kết nối khi lưu ngầm");
-}
-}
+      setCurrent(c => c + 1);
+    }
 
+    try {
+      const res = await api.post(postBody);
+      if (res.ok) {
+        setSaveStatus("saved");
+        setTimeout(() => setSaveStatus("idle"), 3000);
+      } else {
+        setSaveStatus("error");
+        setTimeout(() => setSaveStatus("idle"), 5000);
+        console.error("❌ Lưu thất bại:", res.error);
+      }
+    } catch {
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 5000);
+      console.error("❌ Lỗi kết nối khi lưu ngầm");
+    }
+  };
 
   return (
     <div style={S.page}>
       <style>{`
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .spinner {
-    width: 16px; height: 16px;
-    border: 2.5px solid rgba(255,255,255,0.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    display: inline-block;
-    margin-right: 8px;
-    vertical-align: middle;
-  }
-  @keyframes shimmer {
-    0% { background-position: -800px 0; }
-    100% { background-position: 800px 0; }
-  }
-  .skeleton {
-    background: linear-gradient(90deg, rgba(255,255,255,0.4) 25%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.4) 75%);
-    background-size: 800px 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 8px;
-  }
-`}</style>
-      <div ref={topRef} style={S.topBar}>
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner {
+          width: 16px; height: 16px;
+          border: 2.5px solid rgba(255,255,255,0.4);
+          border-top-color: #fff;
+          border-radius: 50%;
+          animation: spin 0.7s linear infinite;
+          display: inline-block;
+          margin-right: 8px;
+          vertical-align: middle;
+        }
+        @keyframes shimmer {
+          0% { background-position: -800px 0; }
+          100% { background-position: 800px 0; }
+        }
+        .skeleton {
+          background: linear-gradient(90deg, rgba(255,255,255,0.4) 25%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.4) 75%);
+          background-size: 800px 100%;
+          animation: shimmer 1.5s infinite;
+          border-radius: 8px;
+        }
+      `}</style>
+
+      {/* ══ TOP BAR ══ */}
+      <div style={S.topBar}>
         <span style={S.logo}>Chấm sáng kiến Hò Yo Ta</span>
         {reviewer ? (
-  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-    {saveStatus === "saving" && (
-      <span style={{ fontSize: 11, color: "#64748b", fontWeight: 700 }}>
-        <span className="spinner" style={{ width: 10, height: 10, borderWidth: 2 }} />
-        Đang lưu...
-      </span>
-    )}
-    {saveStatus === "saved" && (
-      <span style={{ fontSize: 11, color: "#16a34a", fontWeight: 700 }}>✓ Đã lưu</span>
-    )}
-    {saveStatus === "error" && (
-      <span style={{ fontSize: 11, color: "#ef4444", fontWeight: 700 }}>⚠ Lưu thất bại</span>
-    )}
-    <span style={S.badge}>{reviewer.name} · {reviewer.reviewerId}</span>
-  </div>
-) : step === "login" ? (
-  <button title="Quản lý danh sách Mã YD" onClick={() => setStep("admin")}
-    style={{ background: "none", border: "none", cursor: "pointer", fontSize: 20, color: "#94a3b8", padding: 4, lineHeight: 1 }}>⚙️</button>
-) : null}
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            {saveStatus === "saving" && (
+              <span style={{ fontSize: 11, color: "#64748b", fontWeight: 700 }}>
+                <span className="spinner" style={{ width: 10, height: 10, borderWidth: 2 }} />
+                Đang lưu...
+              </span>
+            )}
+            {saveStatus === "saved" && (
+              <span style={{ fontSize: 11, color: "#16a34a", fontWeight: 700 }}>✓ Đã lưu</span>
+            )}
+            {saveStatus === "error" && (
+              <span style={{ fontSize: 11, color: "#ef4444", fontWeight: 700 }}>⚠ Lưu thất bại</span>
+            )}
+            <span style={S.badge}>{reviewer.name} · {reviewer.reviewerId}</span>
+          </div>
+        ) : step === "login" ? (
+          <button title="Quản lý danh sách Mã YD" onClick={() => setStep("admin")}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 20, color: "#94a3b8", padding: 4, lineHeight: 1 }}>⚙️</button>
+        ) : null}
       </div>
+
       {/* ══ LOGIN ══ */}
       {step === "login" && !loadingIdeas && (
-  <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}>
-  <div style={{ ...S.card, maxWidth: 480 }}>
-          <h1 style={{ ...S.h1, textAlign: "center" }}>Chào mừng anh chị ☀️</h1>
-          <p style={{ ...S.sub, textAlign: "center" }}>Nhập mã YD để bắt đầu chấm điểm sáng kiến</p>
-          <label style={S.label}>Mã YD</label>
-          <input ref={inputRef} style={{ ...S.input, opacity: loading ? 0.6 : 1 }}
-            disabled={loading}
-            value={reviewerId}
-            onChange={(e) => { setReviewerId(e.target.value); setPreview(null); setError(""); }}
-            onKeyDown={(e) => e.key === "Enter" && handleVerify()}
-            onFocus={(e) => (e.target.style.borderColor = "#38bdf8")}
-            onBlur={(e) => (e.target.style.borderColor = "#bae6fd")}
-            maxLength={10} />
-          {preview && (
-            <div style={S.namePreview}>
-              <span>✓</span><span>{preview.name}</span>
-              <span style={{ marginLeft: "auto", color: "#6ee7b7", fontSize: 11 }}>
-                {preview.pendingCount > 0 ? `${preview.pendingCount} sáng kiến chưa chấm` : "Đã hoàn tất chấm sáng kiến"}
-              </span>
-            </div>
-          )}
-          {error && <div style={S.error}>{error}</div>}
-          {!preview ? (
-            <button style={S.btnPrimary} onClick={handleVerify} disabled={loading || !reviewerId.trim()}
-              onMouseOver={(e) => ((e.target as HTMLButtonElement).style.opacity = "0.85")}
-              onMouseOut={(e) => ((e.target as HTMLButtonElement).style.opacity = "1")}>
-              {loading ? <><span className="spinner"/><span>Đang xác nhận...</span></> : "Xác nhận mã →"}
-            </button>
-          ) : (
-            <>
-              <button style={S.btnPrimary} 
-              // ✅ Chuyển sang trang tracking nội bộ
-onClick={() => preview?.pendingCount === 0
-  ? handleGoToTracking()
-  : handleStart()
-} disabled={loading}
+        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}>
+          <div style={{ ...S.card, maxWidth: 480 }}>
+            <h1 style={{ ...S.h1, textAlign: "center" }}>Chào mừng anh chị ☀️</h1>
+            <p style={{ ...S.sub, textAlign: "center" }}>Nhập mã YD để bắt đầu chấm điểm sáng kiến</p>
+            <label style={S.label}>Mã YD</label>
+            <input ref={inputRef} style={{ ...S.input, opacity: loading ? 0.6 : 1 }}
+              disabled={loading}
+              value={reviewerId}
+              onChange={(e) => { setReviewerId(e.target.value); setPreview(null); setError(""); }}
+              onKeyDown={(e) => e.key === "Enter" && handleVerify()}
+              onFocus={(e) => (e.target.style.borderColor = "#38bdf8")}
+              onBlur={(e) => (e.target.style.borderColor = "#bae6fd")}
+              maxLength={10} />
+            {preview && (
+              <div style={S.namePreview}>
+                <span>✓</span><span>{preview.name}</span>
+                <span style={{ marginLeft: "auto", color: "#6ee7b7", fontSize: 11 }}>
+                  {preview.pendingCount > 0 ? `${preview.pendingCount} sáng kiến chưa chấm` : "Đã hoàn tất chấm sáng kiến"}
+                </span>
+              </div>
+            )}
+            {error && <div style={S.error}>{error}</div>}
+            {!preview ? (
+              <button style={S.btnPrimary} onClick={handleVerify} disabled={loading || !reviewerId.trim()}
                 onMouseOver={(e) => ((e.target as HTMLButtonElement).style.opacity = "0.85")}
                 onMouseOut={(e) => ((e.target as HTMLButtonElement).style.opacity = "1")}>
-                {loading
-                ? "Đang tải sáng kiến..."
-                : preview?.pendingCount === 0
-                ? "Chuyển tới báo cáo →"
-                : "Bắt đầu chấm điểm →"}
+                {loading ? <><span className="spinner"/><span>Đang xác nhận...</span></> : "Xác nhận mã →"}
               </button>
-              {preview.isAssigner && (
-                <button style={{ ...S.btnSecondary, width: "100%", marginTop: 12, padding: "12px" }}
-                  onClick={handleGoToAssign} disabled={loading}>
-                  📋 Phân công sáng kiến
+            ) : (
+              <>
+                <button style={S.btnPrimary}
+                  onClick={() => preview?.pendingCount === 0 ? handleGoToTracking() : handleStart()}
+                  disabled={loading}
+                  onMouseOver={(e) => ((e.target as HTMLButtonElement).style.opacity = "0.85")}
+                  onMouseOut={(e) => ((e.target as HTMLButtonElement).style.opacity = "1")}>
+                  {loading ? "Đang tải sáng kiến..."
+                    : preview?.pendingCount === 0 ? "Chuyển tới báo cáo →"
+                    : "Bắt đầu chấm điểm →"}
                 </button>
-              )}
-            </>
-          )}
-        </div> 
-      </div>   
-    )}
-{/* ══ SKELETON LOADING ══ */}
-{loadingIdeas && preview?.pendingCount > 0 && (
-
-  <>
-    {/* Progress bar skeleton */}
-    <div style={{ width: "100%", maxWidth: 800, marginBottom: 20 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
-        <div className="skeleton" style={{ width: 120, height: 14 }} />
-        <div className="skeleton" style={{ width: 80, height: 14 }} />
-      </div>
-      <div className="skeleton" style={{ height: 4, borderRadius: 99 }} />
-    </div>
-
-    {/* Card info skeleton */}
-    <div style={{ ...S.card, background: "rgba(255,255,255,0.75)" }}>
-      <div className="skeleton" style={{ width: "60%", height: 14, marginBottom: 12 }} />
-      <div className="skeleton" style={{ width: "85%", height: 24, marginBottom: 20 }} />
-      <div style={{ height: 1, background: "#bae6fd", margin: "0 0 16px" }} />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 20 }}>
-        {[1,2,3,4].map(i => (
-          <div key={i} className="skeleton" style={{ height: 60, borderRadius: 8 }} />
-        ))}
-      </div>
-      {[1,2,3,4,5].map(i => (
-        <div key={i} className="skeleton" style={{ height: 70, marginBottom: 10, borderRadius: 8 }} />
-      ))}
-    </div>
-
-    {/* Card scoring skeleton */}
-    <div style={{ ...S.card, background: "rgba(255,255,255,0.75)" }}>
-      <div className="skeleton" style={{ width: 100, height: 14, marginBottom: 24 }} />
-      {[1,2,3,4].map(i => (
-        <div key={i} style={{ marginBottom: 20 }}>
-          <div className="skeleton" style={{ width: "40%", height: 16, marginBottom: 10 }} />
-          <div style={{ display: "flex", gap: 8 }}>
-            {[1,2,3].map(j => (
-              <div key={j} className="skeleton" style={{ flex: 1, height: 44, borderRadius: 8 }} />
-            ))}
+                {preview.isAssigner && (
+                  <button style={{ ...S.btnSecondary, width: "100%", marginTop: 12, padding: "12px" }}
+                    onClick={handleGoToAssign} disabled={loading}>
+                    📋 Phân công sáng kiến
+                  </button>
+                )}
+              </>
+            )}
           </div>
         </div>
-      ))}
-    </div>
-  </>
-)}
-{/* ══ SIMPLE LOADING — khi đã hoàn tất ══ */}
-{loadingIdeas && (preview?.pendingCount === 0 || !preview) && (
-  <div style={{ ...S.card, maxWidth: 480, textAlign: "center" as const, padding: "48px 40px" }}>
-    <span className="spinner" style={{ width: 24, height: 24, borderWidth: 3, margin: "0 auto 16px", display: "block" }} />
-    <p style={{ color: "#64748b", fontSize: 14, fontWeight: 600 }}>Đang tải...</p>
-  </div>
-)}
+      )}
+
+      {/* ══ SKELETON LOADING ══ */}
+      {loadingIdeas && preview?.pendingCount > 0 && (
+        <>
+          <div style={{ width: "100%", maxWidth: 800, marginBottom: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
+              <div className="skeleton" style={{ width: 120, height: 14 }} />
+              <div className="skeleton" style={{ width: 80, height: 14 }} />
+            </div>
+            <div className="skeleton" style={{ height: 4, borderRadius: 99 }} />
+          </div>
+          <div style={{ ...S.card, background: "rgba(255,255,255,0.75)" }}>
+            <div className="skeleton" style={{ width: "60%", height: 14, marginBottom: 12 }} />
+            <div className="skeleton" style={{ width: "85%", height: 24, marginBottom: 20 }} />
+            <div style={{ height: 1, background: "#bae6fd", margin: "0 0 16px" }} />
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 20 }}>
+              {[1,2,3,4].map(i => <div key={i} className="skeleton" style={{ height: 60, borderRadius: 8 }} />)}
+            </div>
+            {[1,2,3,4,5].map(i => <div key={i} className="skeleton" style={{ height: 70, marginBottom: 10, borderRadius: 8 }} />)}
+          </div>
+          <div style={{ ...S.card, background: "rgba(255,255,255,0.75)" }}>
+            <div className="skeleton" style={{ width: 100, height: 14, marginBottom: 24 }} />
+            {[1,2,3,4].map(i => (
+              <div key={i} style={{ marginBottom: 20 }}>
+                <div className="skeleton" style={{ width: "40%", height: 16, marginBottom: 10 }} />
+                <div style={{ display: "flex", gap: 8 }}>
+                  {[1,2,3].map(j => <div key={j} className="skeleton" style={{ flex: 1, height: 44, borderRadius: 8 }} />)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* ══ SIMPLE LOADING ══ */}
+      {loadingIdeas && (preview?.pendingCount === 0 || !preview) && (
+        <div style={{ ...S.card, maxWidth: 480, textAlign: "center" as const, padding: "48px 40px" }}>
+          <span className="spinner" style={{ width: 24, height: 24, borderWidth: 3, margin: "0 auto 16px", display: "block" }} />
+          <p style={{ color: "#64748b", fontSize: 14, fontWeight: 600 }}>Đang tải...</p>
+        </div>
+      )}
+
       {/* ══ SCORING ══ */}
       {step === "scoring" && ideas[current] && (() => {
         const idea = ideas[current];
         return (
           <>
             <div style={S.progress}>
-  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#64748b", fontWeight: 700,
-    textShadow: "0 0 6px #fff, 0 0 6px #fff, 0 0 6px #fff" }}>
-    <span>SÁNG KIẾN {current + 1} / {ideas.length}</span>
-    <span>{pct}% hoàn thành</span>
-  </div>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#64748b", fontWeight: 700,
+                textShadow: "0 0 6px #fff, 0 0 6px #fff, 0 0 6px #fff" }}>
+                <span>SÁNG KIẾN {current + 1} / {ideas.length}</span>
+                <span>{pct}% hoàn thành</span>
+              </div>
+              <div style={{ ...S.progressBar, marginTop: 8 }}>
+                <div style={S.progressFill(pct)} />
+              </div>
+            </div>
 
-  {/*<div style={{ position: "relative", marginTop: 16 }}>
-    <img
-  src={boatImage}
-  style={{
-    position: "absolute",
-    bottom: -50,
-    left: `${pct}%`,
-    transform: `translateX(-${pct * 0.5}px)`,   // ← bù trừ theo %
-    width: 120,
-    height: 120,
-    objectFit: "contain",
-    transition: "left 0.4s ease, transform 0.4s ease",
-    pointerEvents: "none",
-    zIndex: 2,
-  */}
-    <div style={{ ...S.progressBar, marginTop: 0 }}>
-      <div style={S.progressFill(pct)} />
-    </div>
-  </div>
+            {/* Idea info card */}
             <div style={S.card}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
                 <div>
@@ -1030,10 +889,12 @@ onClick={() => preview?.pendingCount === 0
               {[["Vấn đề hiện tại", idea.vanDe], ["Mô tả ý tưởng", idea.moTa], ["Hiệu quả dự kiến", idea.hieuQua], ["Nguồn lực cần thiết", idea.nguonLuc], ["Giá trị mang lại", idea.giaTri]].map(([l, v]) => v ? (
                 <div key={l} style={S.fullField}><div style={S.metaLabel}>{l}</div><div style={{ ...S.metaValue, fontSize: 13, lineHeight: 1.7 }}>{v}</div></div>
               ) : null)}
-               {/*idea.link && <a href={idea.link} target="_blank" rel="noreferrer" style={{ display: "inline-block", marginTop: 4, fontSize: 12, color: "#0ea5e9", fontWeight: 700 }}>🔗 Xem tài liệu đính kèm</a>*/}
             </div>
+
+            {/* Scoring card */}
             <div style={S.card}>
               <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: 1, color: "#64748b", textTransform: "uppercase", marginBottom: 20 }}>Chấm điểm</div>
+
               {CRITERIA.map((c) => (
                 <div key={c.key} style={S.criteriaBlock}>
                   <div style={S.criteriaHeader}>
@@ -1043,67 +904,42 @@ onClick={() => preview?.pendingCount === 0
                   <div style={S.criteriaDesc}>{c.desc}</div>
                   <div style={S.optionRow}>
                     {c.options.map((opt) => (
-                      <button key={opt.val} style={S.optionBtn(scores[c.key] === opt.val)} onClick={() => setScores((s) => ({ ...s, [c.key]: opt.val }))}>{opt.label}</button>
+                      <button key={opt.val} style={S.optionBtn(scores[c.key] === opt.val)}
+                        onClick={() => setScores((s) => ({ ...s, [c.key]: opt.val }))}>
+                        {opt.label}
+                      </button>
                     ))}
                   </div>
-                  {c.key !== "scoreQ" && <div style={{ height: 1, background: "#e0f2fe", margin: "16px 0" }} />}
+                  {c.key !== "scoreD" && <div style={{ height: 1, background: "#e0f2fe", margin: "16px 0" }} />}
                 </div>
               ))}
+
+              {/* Score total */}
               <div style={S.scoreTotal}>
                 <div>
                   <div style={{ fontSize: 11, letterSpacing: 2, color: "#64748b", textTransform: "uppercase" }}>Tổng điểm</div>
-                  {allScored && totalScore >= GOODJOB_THRESHOLD && <div style={{ fontSize: 11, color: "#16a34a", marginTop: 2, fontWeight: 700 }}>✓ Đủ điều kiện GOOD JOB</div>}
+                  <div style={{ fontSize: 11, color: "#64748b", marginTop: 2, fontWeight: 600 }}>Tối đa 10 điểm</div>
                 </div>
                 <span style={S.scoreBig(totalScore)}>{allScored ? totalScore : "—"}</span>
               </div>
-              <div style={{ fontSize: 11, letterSpacing: 2, color: "#64748b", textTransform: "uppercase", marginBottom: 12 }}>Kết luận</div>
-              <div style={S.checkboxRow}>
-                <div style={S.checkCard(goodJob, "#16a34a")} onClick={() => setGoodJob((v) => !v)}>
-                  <div style={{ fontSize: 22, marginBottom: 6 }}>{goodJob ? "✅" : "⬜"}</div>
-                  <div style={{ fontWeight: 800, fontSize: 13, color: goodJob ? "#16a34a" : "#64748b" }}>GOOD JOB</div>
-                  <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 4 }}>≥ 7 điểm</div>
-                </div>
-                <div style={S.checkCard(baoVe, "#3b82f6")} onClick={() => setBaoVe((v) => !v)}>
-                  <div style={{ fontSize: 22, marginBottom: 6 }}>{baoVe ? "✅" : "⬜"}</div>
-                  <div style={{ fontWeight: 800, fontSize: 13, color: baoVe ? "#3b82f6" : "#64748b" }}>VÀO VÒNG BẢO VỆ</div>
-                </div>
-              </div>
+
+              {/* Feedback */}
               <div style={{ marginBottom: 24 }}>
                 <div style={{ fontSize: 11, letterSpacing: 2, color: "#64748b", textTransform: "uppercase", marginBottom: 12 }}>Đóng góp — Hướng dẫn thêm hoàn thiện</div>
-                <textarea style={S.feedbackBox} placeholder="Nhận xét, góp ý hoặc hướng dẫn cụ thể để hoàn thiện sáng kiến..."
+                <textarea style={S.feedbackBox}
+                  placeholder="Nhận xét, góp ý hoặc hướng dẫn cụ thể để hoàn thiện sáng kiến..."
                   value={feedback} onChange={(e) => setFeedback(e.target.value)}
                   onFocus={(e) => (e.target.style.borderColor = "#38bdf8")}
                   onBlur={(e) => (e.target.style.borderColor = "#bae6fd")} rows={4} />
               </div>
-              {/* Nút "Cần xem xét phòng ban liên quan" */}
-<div
-  onClick={() => setCanXet(v => !v)}
-  style={{
-    width: "100%",
-    padding: "14px 18px",
-    borderRadius: 10,
-    border: canXet ? "2px solid #d97706" : "1.5px solid #bae6fd",
-    background: canXet ? "#fffbeb" : "#f8fafc",
-    cursor: "pointer",
-    transition: "all .2s",
-    textAlign: "center",
-    marginBottom: 20,
-    boxShadow: canXet ? "0 4px 14px rgba(217,119,6,0.25)" : "none",
-  }}
->
-  <div style={{ fontSize: 22, marginBottom: 6 }}>{canXet ? "✅" : "⬜"}</div>
-  <div style={{ fontWeight: 800, fontSize: 13, color: canXet ? "#d97706" : "#64748b" }}>
-    CẦN SỰ XEM XÉT CỦA PHÒNG BAN LIÊN QUAN
-  </div>
-</div>
+
               {error && <div style={S.error}>{error}</div>}
               <button
-  style={{ ...S.btnPrimary, opacity: !allScored ? 0.4 : 1 }}
-  onClick={handleSubmitScore}
-  disabled={!allScored}
->
-  {current + 1 >= ideas.length ? "Lưu & Hoàn tất ✓" : `Lưu & Chuyển sang sáng kiến ${current + 2} →`}
-</button>
+                style={{ ...S.btnPrimary, opacity: !allScored ? 0.4 : 1 }}
+                onClick={handleSubmitScore}
+                disabled={!allScored}>
+                {current + 1 >= ideas.length ? "Lưu & Hoàn tất ✓" : `Lưu & Chuyển sang sáng kiến ${current + 2} →`}
+              </button>
             </div>
           </>
         );
@@ -1210,11 +1046,11 @@ onClick={() => preview?.pendingCount === 0
                         ))}
                       </div>
                   }
+                  <div style={{ marginTop: 24, paddingTop: 16, borderTop: "1px solid #bae6fd", fontSize: 11, color: "#94a3b8", textAlign: "center" as const }}>
+                    Danh sách được lưu tự động trong trình duyệt này
+                  </div>
                 </>
               )}
-              <div style={{ marginTop: 24, paddingTop: 16, borderTop: "1px solid #bae6fd", fontSize: 11, color: "#94a3b8", textAlign: "center" as const }}>
-                Danh sách được lưu tự động trong trình duyệt này
-              </div>
             </>
           )}
         </div>
@@ -1306,100 +1142,93 @@ onClick={() => preview?.pendingCount === 0
           )}
         </div>
       )}
-{/* ══ TRACKING ══ */}
-{step === "tracking" && (
-  <div style={{ width: "100%", maxWidth: 860, boxSizing: "border-box" as const }}>
-    
-    {/* Header */}
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-      <h2 style={{ ...S.h1, margin: 0, fontSize: 20, textShadow: "0 0 8px #fff" }}>
-        📊 Tracking kết quả chấm điểm
-      </h2>
-      <button
-        onClick={() => setStep("done")}
-        style={{ background: "rgba(255,255,255,0.8)", border: "1px solid #bae6fd", borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 700, color: "#0369a1", cursor: "pointer" }}>
-        ← Quay lại
-      </button>
-    </div>
 
-    <div style={{ ...S.card, padding: "0", overflow: "hidden", overflowX: "auto" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13}}>
-        <thead>
-          <tr style={{ background: "linear-gradient(135deg, #c00000, #e53e3e)", color: "#fff" }}>
-            {["OM/PHÒNG", "TỔNG SK", "ĐÃ CHẤM", "TỶ LỆ", "GOOD JOB", "BẢO VỆ"].map(h => (
-              <th key={h} style={{ padding: "12px 14px", textAlign: "center", fontWeight: 800, fontSize: 11, letterSpacing: 1 as const }}>{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {loadingTracking ? (
-  <tr>
-    <td colSpan={7} style={{ padding: 40, textAlign: "center" as const }}>
-      <span className="spinner" style={{ width: 20, height: 20, borderWidth: 3, display: "inline-block", borderColor: "rgba(0,0,0,0.15)", borderTopColor: "#0ea5e9" }} />
-      <span style={{ marginLeft: 10, color: "#64748b", fontWeight: 600 }}>Đang tải dữ liệu...</span>
-    </td>
-  </tr>
-) : trackingStats.length === 0 ? (
-  <tr><td colSpan={7} style={{ textAlign: "center", padding: 40, color: "#94a3b8" }}>Chưa có dữ liệu</td></tr>
-) : trackingStats.map((row, i) => {
-            const pct = row.pctF || 0;
-            const isGreen = pct >= 100;
-            const isYellow = pct >= 50 && pct < 100;
-            const pctColor = isGreen ? "#16a34a" : isYellow ? "#d97706" : "#ef4444";
-            const pctBg = isGreen ? "#f0fdf4" : isYellow ? "#fffbeb" : "#fef2f2";
-            // Strip prefix T5. cho display
-            const displayName = row.sheetName.replace(/^T\d+\.\s*/i, "");
-            return (
-              <tr key={i} style={{ background: i % 2 === 0 ? "#fff" : "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
-                <td style={{ padding: "10px 14px", fontWeight: 700, color: "#0f172a" }}>{displayName}</td>
-                <td style={{ padding: "10px 14px", textAlign: "center", color: "#64748b" }}>{row.totalIdeas}</td>
-                <td style={{ padding: "10px 14px", textAlign: "center", color: "#0369a1", fontWeight: 700 }}>{row.scoredPairs}</td>
-                <td style={{ padding: "10px 14px", textAlign: "center" }}>
-                  <span style={{ background: pctBg, color: pctColor, fontWeight: 800, borderRadius: 6, padding: "4px 10px", fontSize: 12 }}>
-                    {pct.toFixed(1)}%
-                  </span>
-                  <div style={{ marginTop: 4, height: 4, background: "#e2e8f0", borderRadius: 99, overflow: "hidden" }}>
-                    <div style={{ height: "100%", width: `${Math.min(pct, 100)}%`, background: pctColor, borderRadius: 99, transition: "width .4s" }} />
-                  </div>
-                </td>
-                <td style={{ padding: "10px 14px", textAlign: "center", fontWeight: 700, color: "#16a34a" }}>{row.goodJobCount}</td>
-                <td style={{ padding: "10px 14px", textAlign: "center", fontWeight: 700, color: "#3b82f6" }}>{row.baoVeCount}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-        {trackingStats.length > 0 && (
-          <tfoot>
-  <tr style={{ background: "#f0f9ff", borderTop: "2px solid #bae6fd" }}>
-    <td style={{ padding: "10px 14px", fontWeight: 800, color: "#0f172a" }}>TỔNG</td>
-    <td style={{ padding: "10px 14px", textAlign: "center" as const, fontWeight: 800 }}>
-      {trackingStats.reduce((s, r) => s + (r.totalIdeas || 0), 0)}
-    </td>
-    <td style={{ padding: "10px 14px", textAlign: "center" as const, fontWeight: 800, color: "#0369a1" }}>
-      {trackingStats.reduce((s, r) => s + (r.scoredPairs || 0), 0)}
-    </td>
-    <td style={{ padding: "10px 14px", textAlign: "center" as const }}>
-      {(() => {
-        const totalIdeas = trackingStats.reduce((s, r) => s + (r.totalIdeas || 0), 0);
-        const scoredPairs = trackingStats.reduce((s, r) => s + (r.scoredPairs || 0), 0);
-        const overall = totalIdeas > 0 ? Math.min(scoredPairs / totalIdeas * 100, 100).toFixed(1) : "0.0";
-        return <span style={{ fontWeight: 800, color: "#0369a1" }}>{overall}%</span>;
-      })()}
-    </td>
-    <td style={{ padding: "10px 14px", textAlign: "center" as const, fontWeight: 800, color: "#16a34a" }}>
-      {trackingStats.reduce((s, r) => s + (r.goodJobCount || 0), 0)}
-    </td>
-    <td style={{ padding: "10px 14px", textAlign: "center" as const, fontWeight: 800, color: "#3b82f6" }}>
-      {trackingStats.reduce((s, r) => s + (r.baoVeCount || 0), 0)}
-    </td>
-  </tr>
-</tfoot>
-        )}
-      </table>
-    </div>
-  </div>
-)}
-     {/* ══ DONE ══ */}
+      {/* ══ TRACKING ══ */}
+      {step === "tracking" && (
+        <div style={{ width: "100%", maxWidth: 860, boxSizing: "border-box" as const }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+            <h2 style={{ ...S.h1, margin: 0, fontSize: 20, textShadow: "0 0 8px #fff" }}>
+              📊 Tracking kết quả chấm điểm
+            </h2>
+            <button onClick={() => setStep("done")}
+              style={{ background: "rgba(255,255,255,0.8)", border: "1px solid #bae6fd", borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 700, color: "#0369a1", cursor: "pointer" }}>
+              ← Quay lại
+            </button>
+          </div>
+          <div style={{ ...S.card, padding: "0", overflow: "hidden", overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+              <thead>
+                <tr style={{ background: "linear-gradient(135deg, #c00000, #e53e3e)", color: "#fff" }}>
+                  {["OM/PHÒNG", "TỔNG SK", "ĐÃ CHẤM", "TỶ LỆ", "TB ĐIỂM"].map(h => (
+                    <th key={h} style={{ padding: "12px 14px", textAlign: "center", fontWeight: 800, fontSize: 11, letterSpacing: 1 as const }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {loadingTracking ? (
+                  <tr>
+                    <td colSpan={5} style={{ padding: 40, textAlign: "center" as const }}>
+                      <span className="spinner" style={{ width: 20, height: 20, borderWidth: 3, display: "inline-block", borderColor: "rgba(0,0,0,0.15)", borderTopColor: "#0ea5e9" }} />
+                      <span style={{ marginLeft: 10, color: "#64748b", fontWeight: 600 }}>Đang tải dữ liệu...</span>
+                    </td>
+                  </tr>
+                ) : trackingStats.length === 0 ? (
+                  <tr><td colSpan={5} style={{ textAlign: "center", padding: 40, color: "#94a3b8" }}>Chưa có dữ liệu</td></tr>
+                ) : trackingStats.map((row, i) => {
+                  const pct = row.pctF || 0;
+                  const isGreen = pct >= 100;
+                  const isYellow = pct >= 50 && pct < 100;
+                  const pctColor = isGreen ? "#16a34a" : isYellow ? "#d97706" : "#ef4444";
+                  const pctBg = isGreen ? "#f0fdf4" : isYellow ? "#fffbeb" : "#fef2f2";
+                  const displayName = row.sheetName.replace(/^T\d+\.\s*/i, "");
+                  return (
+                    <tr key={i} style={{ background: i % 2 === 0 ? "#fff" : "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+                      <td style={{ padding: "10px 14px", fontWeight: 700, color: "#0f172a" }}>{displayName}</td>
+                      <td style={{ padding: "10px 14px", textAlign: "center", color: "#64748b" }}>{row.totalIdeas}</td>
+                      <td style={{ padding: "10px 14px", textAlign: "center", color: "#0369a1", fontWeight: 700 }}>{row.scoredPairs}</td>
+                      <td style={{ padding: "10px 14px", textAlign: "center" }}>
+                        <span style={{ background: pctBg, color: pctColor, fontWeight: 800, borderRadius: 6, padding: "4px 10px", fontSize: 12 }}>
+                          {pct.toFixed(1)}%
+                        </span>
+                        <div style={{ marginTop: 4, height: 4, background: "#e2e8f0", borderRadius: 99, overflow: "hidden" }}>
+                          <div style={{ height: "100%", width: `${Math.min(pct, 100)}%`, background: pctColor, borderRadius: 99, transition: "width .4s" }} />
+                        </div>
+                      </td>
+                      <td style={{ padding: "10px 14px", textAlign: "center", fontWeight: 700, color: "#0f172a" }}>
+                        {row.avgScore != null ? row.avgScore.toFixed(1) : "—"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+              {trackingStats.length > 0 && (
+                <tfoot>
+                  <tr style={{ background: "#f0f9ff", borderTop: "2px solid #bae6fd" }}>
+                    <td style={{ padding: "10px 14px", fontWeight: 800, color: "#0f172a" }}>TỔNG</td>
+                    <td style={{ padding: "10px 14px", textAlign: "center" as const, fontWeight: 800 }}>
+                      {trackingStats.reduce((s, r) => s + (r.totalIdeas || 0), 0)}
+                    </td>
+                    <td style={{ padding: "10px 14px", textAlign: "center" as const, fontWeight: 800, color: "#0369a1" }}>
+                      {trackingStats.reduce((s, r) => s + (r.scoredPairs || 0), 0)}
+                    </td>
+                    <td style={{ padding: "10px 14px", textAlign: "center" as const }}>
+                      {(() => {
+                        const totalIdeas = trackingStats.reduce((s, r) => s + (r.totalIdeas || 0), 0);
+                        const scoredPairs = trackingStats.reduce((s, r) => s + (r.scoredPairs || 0), 0);
+                        const overall = totalIdeas > 0 ? Math.min(scoredPairs / totalIdeas * 100, 100).toFixed(1) : "0.0";
+                        return <span style={{ fontWeight: 800, color: "#0369a1" }}>{overall}%</span>;
+                      })()}
+                    </td>
+                    <td style={{ padding: "10px 14px", textAlign: "center" as const, fontWeight: 800, color: "#0f172a" }}>—</td>
+                  </tr>
+                </tfoot>
+              )}
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* ══ DONE ══ */}
       {step === "done" && (
         <div style={{ ...S.card, ...S.done }}>
           <div style={{ fontSize: 56, marginBottom: 16 }}>🎉</div>
@@ -1412,27 +1241,16 @@ onClick={() => preview?.pendingCount === 0
               onClick={() => { setStep("login"); setPreview(null); setReviewerId(""); setIdeas([]); setReviewer(null); setAssignmentStats({}); setSelectedIdeas([]); setSelectedAssignee(""); }}>
               ← Quay lại trang chủ
             </button>
-            <button
-              style={{ ...S.btnPrimary, padding: "12px 28px" }}
-              onClick={handleGoToTracking}
-              disabled={loadingTracking}
-            >
+            <button style={{ ...S.btnPrimary, padding: "12px 28px" }}
+              onClick={handleGoToTracking} disabled={loadingTracking}>
               {loadingTracking
                 ? <><span className="spinner" /><span>Đang tải...</span></>
                 : "📊 Theo dõi tiến độ chấm"}
             </button>
             {mySheetUrl && (
               <a href={mySheetUrl} target="_blank" rel="noreferrer"
-                style={{
-                  ...S.btnPrimary,
-                  padding: "12px 28px",
-                  textDecoration: "none",
-                  display: "inline-block",
-                  background: "linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)",
-                  width: "100%",
-                  textAlign: "center",
-                  boxSizing: "border-box",
-                }}>
+                style={{ ...S.btnPrimary, padding: "12px 28px", textDecoration: "none", display: "inline-block",
+                  background: "linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)", width: "100%", textAlign: "center", boxSizing: "border-box" }}>
                 📄 Xem sheet chấm của tôi
               </a>
             )}
