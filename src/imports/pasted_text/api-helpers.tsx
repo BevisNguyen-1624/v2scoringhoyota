@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import bgImage from "../KV_HÒ_YO_TA-01.jpeg";
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxPLWddV1N53qgQ8Xug49yBHXlMU5yFyXzzqb6fdXJS05ZHsrSRrd6dqe7HkA-SPH5F/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbz4u4R_dnh3tgP4LWXMwJ1yhZ5d_RTC_-0e-_1j59jYNPxtHAR03fTt7tXrVzDIjs5h/exec";
 const USE_MOCK = false;
 const ADMIN_PIN = "1234";
 const LS_KEY = "hoYoTa_reviewers";
@@ -915,7 +915,7 @@ export default function App() {
                       ["Lợi ích định tính", idea.loiIchDinhTinh],
                     ]} />
 
-                    <Cluster color="#8b5cf6" label="Rủi ro & Đo lường" fields={[
+                    <Cluster color="#8b5cf6" label="Rủi ro" fields={[
                       ["Các rủi ro có thể phát sinh", idea.ruiRo],
                       ["Giải pháp dự phòng", idea.duPhong],
                       ["Kế hoạch đo lường kết quả (KPIs)", idea.kpi],
